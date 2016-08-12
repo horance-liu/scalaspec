@@ -2,7 +2,7 @@ package scalaspec.io
 
 import java.io.File
 
-import scalaspec.typeparameter.reader.FileReader
+import scalaspec.reader.generic.FileReader
 import org.scalatest.Matchers._
 import org.scalatest._
 

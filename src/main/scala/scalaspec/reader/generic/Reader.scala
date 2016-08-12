@@ -1,4 +1,4 @@
-package scalaspec.typeparameter.reader
+package scalaspec.reader.generic
 
 trait Reader[+T] {
   val source: T
