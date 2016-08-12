@@ -2,8 +2,11 @@ package scalaspec.io
 
 import java.io.File
 
+import scalaspec.typeparameter.reader.FileReader
 import org.scalatest.Matchers._
 import org.scalatest._
+
+import scala.collection.mutable.ArrayBuffer
 
 class ReaderSpec extends FunSpec {
   describe("Reader") {
@@ -17,5 +20,7 @@ class ReaderSpec extends FunSpec {
 
       firstlast(List("a", "b", "c"))
     }
+
+    ArrayBuffer(1, 2).forall(_ > 0)
   }
 }

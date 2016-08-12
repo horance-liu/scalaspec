@@ -6,14 +6,12 @@ trait Logging {
   val loggerName = this.getClass.getName
   lazy val logger: Logger = LoggerFactory.getLogger(loggerName)
 
-  def trace(msg: => String): Unit = {
+  def trace(msg: => String) {
     if (logger.isTraceEnabled())
       logger.trace(msg)
   }
 
-  def trace(e: => Throwable) = trace("", e)
-
-  def trace(msg: => String, e: => Throwable) = {
+  def trace(msg: => String, e: => Throwable) {
     if (logger.isTraceEnabled())
       logger.trace(msg, e)
   }
@@ -22,12 +20,12 @@ trait Logging {
     Logging.swallow(logger.trace, action)
   }
 
-  def debug(msg: => String): Unit = {
+  def debug(msg: => String) {
     if (logger.isDebugEnabled())
       logger.debug(msg)
   }
 
-  def debug(msg: => String, e: => Throwable) = {
+  def debug(msg: => String, e: => Throwable) {
     if (logger.isDebugEnabled())
       logger.debug(msg,e)
   }
@@ -36,12 +34,12 @@ trait Logging {
     Logging.swallow(logger.debug, action)
   }
 
-  def info(msg: => String): Unit = {
+  def info(msg: => String) {
     if (logger.isInfoEnabled())
       logger.info(msg)
   }
 
-  def info(msg: => String,e: => Throwable) = {
+  def info(msg: => String,e: => Throwable) {
     if (logger.isInfoEnabled())
       logger.info(msg,e)
   }
@@ -50,11 +48,11 @@ trait Logging {
     Logging.swallow(logger.info, action)
   }
 
-  def warn(msg: => String): Unit = {
+  def warn(msg: => String) {
     logger.warn(msg)
   }
 
-  def warn(msg: => String, e: => Throwable) = {
+  def warn(msg: => String, e: => Throwable) {
     logger.warn(msg,e)
   }
 
@@ -62,11 +60,11 @@ trait Logging {
     Logging.swallow(logger.warn, action)
   }
 
-  def error(msg: => String): Unit = {
+  def error(msg: => String) {
     logger.error(msg)
   }
 
-  def error(msg: => String, e: => Throwable) = {
+  def error(msg: => String, e: => Throwable) {
     logger.error(msg, e)
   }
 

@@ -13,12 +13,12 @@ class SerializationSpec extends FunSpec {
       RemoteConnection.write("hello") should be("hello")
     }
 
-    it("serialize into string using view bound") {
-      import view.RemoteConnection
-
-      RemoteConnection.write(100) should be("100")
-      RemoteConnection.write(3.14f) should be("3.14")
-      RemoteConnection.write("hello") should be("hello")
-    }
+//    it("serialize into string using view bound") {
+//      import view.RemoteConnection
+//
+//      RemoteConnection.write(100) should be("100")
+//      RemoteConnection.write(3.14f) should be("3.14")
+//      RemoteConnection.write("hello") should be("hello")
+//    }
   }
 }
