@@ -1,4 +1,4 @@
-package scalaspec.util
+package javaspec.util
 
 import org.scalatest.FunSpec
 import org.scalatest.Matchers._

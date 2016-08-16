@@ -1,4 +1,4 @@
-package scalaspec.util;
+package javaspec.util;
 
 public final class StringUtil {
   private StringUtil() {
