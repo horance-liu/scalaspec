@@ -1,4 +1,4 @@
-package scalaspec.matcher
+package scalaspec.io
 
 import java.io.File
 

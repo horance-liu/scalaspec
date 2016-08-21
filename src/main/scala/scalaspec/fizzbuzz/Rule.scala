@@ -7,23 +7,22 @@ object Rule {
   import Action.Action
 
   def atom(matcher: => Matcher, action: => Action): Rule =
-    m => if (matcher(m)) action(m) else ""
+    n => if (matcher(n)) action(n) else ""
 
-  def times(n: Int, word: String): Rule =
-    m => if (m % n == 0) word else ""
+  def allof(rules: Rule*): Rule =
+    n => rules.foldLeft("") { _ + _(n) }
 
-  def contains(n: Int, word: String): Rule =
-    m => if (m.toString.contains(n.toString)) word else ""
+  def anyof(rules: Rule*): Rule =
+    n => rules.map(_(n))
+      .filterNot(_.isEmpty)
+      .headOption
+      .getOrElse("")
 
-  def default: Rule =
-    m => m.toString
-
-  def allOf(rules: (Int => String)*): Rule =
-    m => rules.foldLeft("") { _ + _(m) }
-
-  def anyOf(rules: (Int => String)*): Rule =
-    m => rules.map(_(m))
-    .filterNot(_.isEmpty)
-    .headOption
-    .getOrElse("")
+  def comb(rules: Rule*) = {
+    def subsets: Seq[Rule] =
+      rules.toSet.subsets.toList.reverse.map { subset =>
+        allof(subset.toList: _*)
+      }
+    anyof(subsets: _*)
+  }
 }
