@@ -1,8 +1,5 @@
 package scalaspec.matcher.oo
 
-import java.lang.Iterable
-import java.util.{Arrays, Iterator}
-
 import scalaspec.matcher.oo.internal.{ArrayIterator, SelfDescribingValueIterator}
 
 object Description {
@@ -25,7 +22,7 @@ trait Description {
   }
 
   /**
-    * Appends the description of a {@link SelfDescribing} value to this description.
+    * Appends the description of a SelfDescribing value to this description.
     */
   def appendDescriptionOf(value: SelfDescribing): Description = {
     value.describeTo(this)
@@ -36,32 +33,31 @@ trait Description {
     * Appends an arbitrary value to the description.
     */
   def appendValue(value: Any): Description = {
-    if (value == null) {
-      append("null")
-    } else if (value.isInstanceOf[String]) {
-      toJavaSyntax(value.asInstanceOf[String])
-    } else if (value.isInstanceOf[Character]) {
-      append('"')
-      toJavaSyntax(value.asInstanceOf[Character])
-      append('"')
-    } else if (value.isInstanceOf[Short]) {
-      append('<')
-      append(descriptionOf(value))
-      append("s>")
-    } else if (value.isInstanceOf[Long]) {
-      append('<')
-      append(descriptionOf(value))
-      append("L>")
-    } else if (value.isInstanceOf[Float]) {
-      append('<')
-      append(descriptionOf(value))
-      append("F>")
-    } else if (value.getClass.isArray) {
-      appendValueList("[", ", ", "]", new ArrayIterator(value))
-    } else {
-      append('<')
-      append(descriptionOf(value))
-      append('>')
+    value match {
+      case null => append("null")
+      case s: String => toJavaSyntax(s)
+      case c: Character =>
+        append('"')
+        toJavaSyntax(c)
+        append('"')
+      case s: Short =>
+        append('<')
+        append(descriptionOf(value))
+        append("s>")
+      case l: Long =>
+        append('<')
+        append(descriptionOf(value))
+        append("L>")
+      case f: Float =>
+        append('<')
+        append(descriptionOf(value))
+        append("F>")
+      case a: Array[_] =>
+        appendValueList("[", ", ", "]", a)
+      case o: Any =>
+        append('<')
+        append(descriptionOf(o))
+        append('>')
     }
     this
   }
@@ -69,32 +65,31 @@ trait Description {
   private def descriptionOf(value: Any): String = try {
     String.valueOf(value)
   } catch {
-    case e: Exception => {
+    case e: Exception =>
       value.getClass.getName + "@" + Integer.toHexString(value.hashCode)
-    }
   }
 
   /**
     * Append the String <var>str</var> to the description.
-    * The default implementation passes every character to {@link #append(char)}.
+    * The default implementation passes every character to append(char).
     * Override in subclasses to provide an efficient implementation.
     */
-  protected def append(str: String) {
+  protected def append(str: String): Unit = {
     str.foreach(append(_))
   }
 
   /**
     * Append the char <var>c</var> to the description.
     */
-  protected def append(c: Char)
+  protected def append(c: Char): Unit
 
-  private def toJavaSyntax(unformatted: String) {
+  private def toJavaSyntax(unformatted: String): Unit = {
     append('"')
     unformatted.foreach(toJavaSyntax(_))
     append('"')
   }
 
-  private def toJavaSyntax(ch: Char) {
+  private def toJavaSyntax(ch: Char): Unit =
     ch match {
       case '"'  => append("\\\"")
       case '\n' => append("\\n")
@@ -103,13 +98,6 @@ trait Description {
       case '\\' => append("\\\\")
       case _    => append(ch)
     }
-  }
-
-  /**
-    * Appends a list of values to the description.
-    */
-  def appendValueList[T](start: String, separator: String, end: String, values: T*): Description =
-    appendValueList(start, separator, end, Arrays.asList(values))
 
   /**
     * Appends a list of values to the description.
@@ -118,16 +106,18 @@ trait Description {
     appendValueList(start, separator, end, values.iterator)
 
   /**
-    * Appends a list of {@link org.hamcrest.SelfDescribing} objects
-    * to the description.
+    * Appends a list of values to the description.
     */
-  def appendList(start: String, separator: String, end: String, values: Iterable[_ <: SelfDescribing]): Description =
-    appendList(start, separator, end, values.iterator)
+  def appendValueList[T](start: String, separator: String, end: String, values: Iterator[T]): Description =
+    appendList(start, separator, end, SelfDescribingValueIterator(values))
 
-  private def appendValueList[T](start: String, separator: String, end: String, values: Iterator[T]): Description =
-    appendList(start, separator, end, new SelfDescribingValueIterator[T](values))
+  /**
+    * Appends a list of SelfDescribing to the description.
+    */
+  def appendList(start: String, separator: String, end: String, i: Iterable[SelfDescribing]): Description =
+    appendList(start, separator, end, i.iterator)
 
-  private def appendList(start: String, separator: String, end: String, i: Iterator[_ <: SelfDescribing]): Description = {
+  private def appendList(start: String, separator: String, end: String, i: Iterator[SelfDescribing]): Description = {
     var separate: Boolean = false
     append(start)
     while (i.hasNext) {

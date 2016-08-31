@@ -10,7 +10,7 @@ import scalaspec.reader.generic.FileReader
 class FileReaderSpec extends FunSpec {
   describe("FileReader") {
     it("can read from file") {
-      new FileReader(new File("/Users/guangyun.lgc/.zshrc")).read.contains("JAVA_HOME") should be(true)
+      new FileReader(new File("./README.md")).read.contains("ScalaSpec") should be(true)
     }
   }
 }
