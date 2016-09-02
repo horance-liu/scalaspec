@@ -35,10 +35,10 @@ trait Description {
   def appendValue(value: Any): Description = {
     value match {
       case null => append("null")
-      case s: String => toJavaSyntax(s)
+      case s: String => toScalaSyntax(s)
       case c: Character =>
         append('"')
-        toJavaSyntax(c)
+        toScalaSyntax(c)
         append('"')
       case s: Short =>
         append('<')
@@ -83,13 +83,13 @@ trait Description {
     */
   protected def append(c: Char): Unit
 
-  private def toJavaSyntax(unformatted: String): Unit = {
+  private def toScalaSyntax(unformatted: String): Unit = {
     append('"')
-    unformatted.foreach(toJavaSyntax(_))
+    unformatted.foreach(toScalaSyntax(_))
     append('"')
   }
 
-  private def toJavaSyntax(ch: Char): Unit =
+  private def toScalaSyntax(ch: Char): Unit =
     ch match {
       case '"'  => append("\\\"")
       case '\n' => append("\\n")
